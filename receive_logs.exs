@@ -11,11 +11,11 @@ end
 
 {:ok, connection} = AMQP.Connection.open
 {:ok, channel} = AMQP.Channel.open(connection)
-#fanout: ele apenas transmite todas as mensagens que recebe para todas as filas que conhece.
+# fanout: ele apenas transmite todas as mensagens que recebe para todas as filas que conhece.
 AMQP.Exchange.declare(channel, "logs", :fanout)
-#criando nomes aleatorios de filas.
+# criando nomes aleatorios de filas.
 {:ok, %{queue: queue_name}} = AMQP.Queue.declare(channel, "", exclusive: true)
-#a relação entre a troca e uma fila é chamada de ligação.
+# a relação entre a troca e uma fila é chamada de ligação.
 AMQP.Queue.bind(channel, queue_name, "logs")
 AMQP.Basic.consume(channel, queue_name, nil, no_ack: true)
 IO.puts " [*] Waiting for messages. To exit press CTRL+C, CTRL+C"
