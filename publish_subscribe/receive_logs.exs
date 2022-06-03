@@ -1,4 +1,4 @@
-defmodule ReceiveLogs do
+defmodule Introduction::ReceiveLogs do
   def wait_for_messages(channel) do
     receive do
       {:basic_deliver, payload, _meta} ->
