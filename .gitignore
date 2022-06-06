@@ -24,3 +24,4 @@ rabbitmq_tutorials-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+/log/
