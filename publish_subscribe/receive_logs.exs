@@ -1,4 +1,4 @@
-defmodule Introduction::ReceiveLogs do
+defmodule ReceiveLogs do
   def wait_for_messages(channel) do
     receive do
       {:basic_deliver, payload, _meta} ->
@@ -11,11 +11,12 @@ end
 
 {:ok, connection} = AMQP.Connection.open
 {:ok, channel} = AMQP.Channel.open(connection)
-# fanout: ele apenas transmite todas as mensagens que recebe para todas as filas que conhece.
+# Fanout: ele apenas transmite todas as mensagens que recebe para todas as filas que conhece.
 AMQP.Exchange.declare(channel, "logs", :fanout)
-# criando nomes aleatorios de filas.
+# Criando nomes aleatorios de filas.
 {:ok, %{queue: queue_name}} = AMQP.Queue.declare(channel, "", exclusive: true)
-# a relação entre a troca e uma fila é chamada de ligação.
+# Precisamos dizer à exchange para enviar mensagens para nossa fila
+# A relação entre a troca e uma fila é chamada de ligação.
 AMQP.Queue.bind(channel, queue_name, "logs")
 AMQP.Basic.consume(channel, queue_name, nil, no_ack: true)
 IO.puts " [*] Waiting for messages. To exit press CTRL+C, CTRL+C"

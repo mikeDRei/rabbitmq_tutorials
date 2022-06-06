@@ -2,7 +2,7 @@ defmodule ReceiveLogsTopic do
   def wait_for_messages(channel) do
     receive do
       {:basic_deliver, payload, meta} ->
-      IO.puts " [x] Recebido [#{meta.routing_key}] #{payload}"
+      IO.puts " [x] Received [#{meta.routing_key}] #{payload}"
 
       wait_for_messages(channel)
     end
@@ -17,7 +17,7 @@ AMQP.Exchange.declare(channel, "topic_logs", :topic)
 {:ok, %{queue: queue_name}} = AMQP.Queue.declare(channel, "", exclusive: true)
 
 if length(System.argv) == 0 do
-  IO.puts "Use: mix run receive_logs_topic.exs [chave de ligação]... ;)"
+  IO.puts "Usage: mix run receive_logs_topic.exs [binding_key]..."
   System.halt(1)
 end
 for binding_key <- System.argv do
@@ -26,6 +26,6 @@ end
 
 AMQP.Basic.consume(channel, queue_name, nil, no_ack: true)
 
-IO.puts " [*] Aguardando mensagens. Para sair pressione CTRL+C, CTRL+C"
+IO.puts " [*] Waiting for messages. To exit press CTRL+C, CTRL+C"
 
 ReceiveLogsTopic.wait_for_messages(channel)

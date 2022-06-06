@@ -18,7 +18,8 @@ message =
   end
 
 AMQP.Exchange.declare(channel, "direct_logs", :direct)
-# a gravidade (serverity) da mensagem, serve como filtro para o operador (receive_logs)
+# A gravidade (serverity) da mensagem, serve como filtro para o operador (receive_logs)
+# Uma mensagem vai para as filas cuja chave de ligação corresponde exatamente à chave de roteamento da mensagem.
 for {severity, true} <- severities do
   severity = severity |> to_string
   AMQP.Basic.publish(channel, "direct_logs", severity, message)

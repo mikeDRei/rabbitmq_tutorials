@@ -1,5 +1,7 @@
 defmodule Receive do
-#Aguardando a mensagem  
+# Aguardando a mensagem 
+# Sempre que a biblioteca cliente recebe uma entrega do RabbitMQ, 
+# Uma mensagem Elixir {:basic_deliver, payload, metadata} é enviada para o processo Elixir especificado. 
   def wait_for_messages do
     receive do
       {:basic_deliver, payload, _meta} ->

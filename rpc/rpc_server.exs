@@ -9,7 +9,9 @@ defmodule FibServer do
         {n, _} = Integer.parse(payload)
         IO.puts " [.] fib(#{n})"
         response = fib(n)
-
+# o trabalhador RPC (também conhecido como servidor) está aguardando solicitações nessa fila.
+# Quando uma solicitação aparece, ele faz o trabalho e envia uma mensagem com o 
+# resultado de volta ao Cliente, usando a fila do campo reply_to.
         AMQP.Basic.publish(channel, "", meta.reply_to, "#{response}", correlation_id: meta.correlation_id)
         AMQP.Basic.ack(channel, meta.delivery_tag)
 
